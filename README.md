@@ -112,7 +112,7 @@ financas-facil/
 
 ## 👥 Equipe
 
-> Projeto desenvolvido como entrega acadêmica da disciplina de Gestão Ágil de Projetos.
+> Projeto desenvolvido como entrega acadêmica
 
 ---
 
