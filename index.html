@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financas Facil -- Controle seu dinheiro com inteligencia</title>
+  <meta name="description" content="Sistema de gestao financeira pessoal para controlar receitas, despesas, saldo e metas. Gratuito e privado." />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web@2.1.1/src/index.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar" id="navbar" role="navigation" aria-label="Navegacao principal">
+  <div class="nav-container">
+    <a href="#hero" class="nav-logo" aria-label="Financas Facil">
+      <div class="logo-icon" aria-hidden="true">&#128176;</div>
+      <span class="logo-text">Finan&#231;as <span>F&#225;cil</span></span>
+    </a>
+    <ul class="nav-links" id="navLinks" role="menubar">
+      <li role="none"><a href="#dashboard"   role="menuitem" class="nav-link" data-section="dashboard">Dashboard</a></li>
+      <li role="none"><a href="#lancamentos" role="menuitem" class="nav-link" data-section="lancamentos">Lan&#231;amentos</a></li>
+      <li role="none"><a href="#recursos"    role="menuitem" class="nav-link" data-section="recursos">Recursos</a></li>
+      <li role="none"><a href="#sobre"       role="menuitem" class="nav-link" data-section="sobre">Sobre</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button id="btnTema" class="btn-tema" title="Alternar tema" aria-label="Alternar tema">&#127769;</button>
+      <button class="btn-outline" id="btnEntrar"  aria-label="Entrar">Entrar</button>
+      <button class="btn-primary" id="btnComecar" aria-label="Comecar">Come&#231;ar</button>
+      <button class="nav-hamburger" id="btnMenu"  aria-label="Abrir menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero" aria-label="Apresentacao">
+  <canvas id="canvasHero" aria-hidden="true"></canvas>
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="badge-dot" aria-hidden="true"></span>
+        Sistema gratuito de gest&#227;o financeira
+      </div>
+      <h1 class="hero-title">
+        Controle seu dinheiro<br>
+        com o <span class="highlight">Finan&#231;as F&#225;cil.</span>
+      </h1>
+      <p class="hero-subtitle">
+        Organize receitas, despesas e metas financeiras em um s&#243; lugar.
+        Visualize seu progresso e tome decis&#245;es inteligentes.
+      </p>
+      <div class="hero-actions">
+        <button class="btn-primary" id="btnCadastrarLancamento" aria-label="Cadastrar lancamento">
+          &#10024; Cadastrar lan&#231;amento
+        </button>
+        <button class="btn-outline" id="btnCriarConta" aria-label="Criar conta gratis">
+          Criar conta gr&#225;tis
+        </button>
+      </div>
+      <div class="hero-stats" aria-label="Estatisticas">
+        <div class="hero-stat"><strong>R$ 0</strong><span>Custo mensal</span></div>
+        <div class="hero-stat"><strong>100%</strong><span>Local &amp; privado</span></div>
+        <div class="hero-stat"><strong>&#8734;</strong><span>Lan&#231;amentos</span></div>
+      </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <h3>Vis&#227;o Geral</h3>
+          <span style="font-size:.78rem;color:var(--text-muted)">Abril 2026</span>
+        </div>
+        <div class="hero-saldo" id="heroSaldo">R$ 0,00</div>
+        <p class="hero-saldo-label">Saldo dispon&#237;vel</p>
+        <div class="hero-mini-cards">
+          <div class="hero-mini-card receita">
+            <div class="hmc-label">&#8593; Receitas</div>
+            <div class="hmc-value" id="heroReceitas">R$ 0,00</div>
+          </div>
+          <div class="hero-mini-card despesa">
+            <div class="hmc-label">&#8595; Despesas</div>
+            <div class="hmc-value" id="heroDespesas">R$ 0,00</div>
+          </div>
+        </div>
+        <p class="hero-bar-label">Meta mensal alcan&#231;ada</p>
+        <div class="hero-bar">
+          <div class="hero-bar-fill" id="heroBarFill"></div>
+        </div>
+      </div>
+      <div class="float-card top">
+        <span class="fc-icon">&#128200;</span>
+        <div><div class="fc-val">+32,5%</div><div class="fc-label">Economia este m&#234;s</div></div>
+      </div>
+      <div class="float-card bot">
+        <span class="fc-icon">&#127919;</span>
+        <div><div class="fc-val">Meta atingida!</div><div class="fc-label">Parab&#233;ns</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="onda-transicao" aria-hidden="true"></div>
+</section>
+
+<!-- RECURSOS -->
+<section class="section" id="recursos" aria-label="Recursos">
+  <canvas id="canvasRecursos" aria-hidden="true"></canvas>
+  <div class="page-container">
+    <div class="section-header">
+      <span class="section-label">Funcionalidades</span>
+      <h2 class="section-title">Tudo que voc&#234; precisa para controlar suas finan&#231;as</h2>
+      <p class="section-subtitle">Uma plataforma completa, intuitiva e sem custo.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card"><div class="feature-icon">&#128202;</div><h3>Dashboard inteligente</h3><p>Visualize receitas, despesas e saldo em cards atualizados em tempo real.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#129361;</div><h3>Gr&#225;fico de pizza</h3><p>Descubra para onde vai seu dinheiro com gr&#225;fico interativo por categoria.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128200;</div><h3>Evolu&#231;&#227;o do saldo</h3><p>Acompanhe como seu saldo evoluiu ao longo dos meses com gr&#225;fico de linha.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#127919;</div><h3>Metas financeiras</h3><p>Defina uma meta de economia e acompanhe o progresso com barra visual.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128269;</div><h3>Busca e filtros</h3><p>Busque por descri&#231;&#227;o, filtre por m&#234;s e tipo, ordene como preferir.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128228;</div><h3>Exportar e importar</h3><p>Exporte para CSV ou fa&#231;a backup em JSON. Importe quando precisar.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128260;</div><h3>Lan&#231;amentos recorrentes</h3><p>Marque despesas e receitas como recorrentes para identific&#225;-las facilmente.</p></div>
+      <div class="feature-card"><div class="feature-icon">&#128241;</div><h3>App instal&#225;vel (PWA)</h3><p>Instale no celular ou desktop e use offline como um aplicativo nativo.</p></div>
+    </div>
+  </div>
+  <div class="onda-transicao" aria-hidden="true"></div>
+</section>
+
+<!-- SOBRE -->
+<section class="section sobre-section" id="sobre" aria-label="Sobre o projeto">
+  <canvas id="canvasSobre" aria-hidden="true"></canvas>
+  <div class="page-container">
+    <div class="section-header">
+      <span class="section-label">Trabalho Acad&#234;mico</span>
+      <h2 class="section-title">Sobre o Finan&#231;as F&#225;cil</h2>
+      <p class="section-subtitle">Um prot&#243;tipo funcional desenvolvido como projeto de Gest&#227;o &#193;gil de Projetos.</p>
+    </div>
+    <div class="sobre-grid">
+      <div class="sobre-card">
+        <div class="sobre-icon">&#127891;</div>
+        <h3>Contexto Acad&#234;mico</h3>
+        <p>Desenvolvido como entrega pr&#225;tica da disciplina de Gest&#227;o &#193;gil de Projetos, aplicando os princ&#237;pios do framework Scrum.</p>
+      </div>
+      <div class="sobre-card">
+        <div class="sobre-icon">&#128295;</div>
+        <h3>Tecnologias</h3>
+        <p>HTML5, CSS3 e JavaScript puro (ES6+). Persist&#234;ncia via localStorage. Gr&#225;ficos com Chart.js. Anima&#231;&#245;es com Canvas 2D. PWA instal&#225;vel.</p>
+      </div>
+      <div class="sobre-card">
+        <div class="sobre-icon">&#127919;</div>
+        <h3>Objetivo</h3>
+        <p>Demonstrar um prot&#243;tipo funcional de gest&#227;o financeira pessoal com design premium, responsivo e acess&#237;vel, sem servidores externos.</p>
+      </div>
+      <div class="sobre-card">
+        <div class="sobre-icon">&#9889;</div>
+        <h3>Metodologia &#193;gil</h3>
+        <p>Processo iterativo com sprints curtos, priorizando funcionalidades de maior valor e entrega cont&#237;nua de incrementos funcionais.</p>
+      </div>
+    </div>
+    <div class="sprints-timeline" aria-label="Linha do tempo">
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 1</div>
+        <div class="sprint-desc">Estrutura base, navbar, hero section e paleta visual</div>
+      </div>
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 2</div>
+        <div class="sprint-desc">Dashboard, formul&#225;rio e persist&#234;ncia localStorage</div>
+      </div>
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 3</div>
+        <div class="sprint-desc">Anima&#231;&#245;es de part&#237;culas, transi&#231;&#245;es e tema escuro</div>
+      </div>
+      <div class="sprint-item">
+        <div class="sprint-num">Sprint 4</div>
+        <div class="sprint-desc">Gr&#225;ficos Chart.js, exporta&#231;&#227;o CSV/JSON, PWA e filtros</div>
+      </div>
+    </div>
+  </div>
+  <div class="onda-transicao onda-para-secundario" aria-hidden="true"></div>
+</section>
+
+<!-- DASHBOARD -->
+<section class="section" id="dashboard" aria-label="Dashboard financeiro" style="background:var(--bg-secondary);">
+  <canvas id="canvasDashboard" aria-hidden="true"></canvas>
+  <div class="page-container">
+
+    <div class="dashboard-header">
+      <div>
+        <h2>Dashboard</h2>
+        <p id="dashboardData" style="color:var(--text-muted);font-size:.9rem;">Carregando...</p>
+      </div>
+      <div class="dashboard-acoes" role="group" aria-label="Acoes do dashboard">
+        <button class="btn-acao" id="btnExportarCSV"  aria-label="Exportar CSV">&#128202; CSV</button>
+        <button class="btn-acao" id="btnExportarJSON" aria-label="Fazer backup">&#128190; Backup</button>
+        <label  class="btn-acao btn-importar" for="inputImportarJSON" aria-label="Importar dados" role="button" tabindex="0">&#128229; Importar</label>
+        <input type="file" id="inputImportarJSON" accept=".json" aria-hidden="true" />
+        <button class="btn-primary btn-sm" id="btnNovoDash" aria-label="Novo lancamento">+ Novo</button>
+      </div>
+    </div>
+
+    <!-- Cards de resumo -->
+    <div class="dashboard-cards" role="region" aria-label="Resumo financeiro">
+      <div class="summary-card receitas" role="article">
+        <div class="sc-icon">&#128154;</div>
+        <div class="sc-label">Receitas</div>
+        <div class="sc-value" id="cardReceitas">R$ 0,00</div>
+        <div class="sc-sub"   id="cardReceitasQtd">0 lan&#231;amentos</div>
+      </div>
+      <div class="summary-card despesas" role="article">
+        <div class="sc-icon">&#128308;</div>
+        <div class="sc-label">Despesas</div>
+        <div class="sc-value" id="cardDespesas">R$ 0,00</div>
+        <div class="sc-sub"   id="cardDespesasQtd">0 lan&#231;amentos</div>
+      </div>
+      <div class="summary-card saldo" role="article">
+        <div class="sc-icon">&#9889;</div>
+        <div class="sc-label">Saldo Atual</div>
+        <div class="sc-value" id="cardSaldo">R$ 0,00</div>
+        <div class="sc-sub"   id="cardSaldoStatus">Sem movimenta&#231;&#245;es</div>
+      </div>
+      <div class="summary-card categoria" role="article">
+        <div class="sc-icon">&#127942;</div>
+        <div class="sc-label">Maior Gasto</div>
+        <div class="sc-value" id="cardCategoria" style="font-size:1.1rem">&#8212;</div>
+        <div class="sc-sub"   id="cardCategoryValor">Nenhuma categoria</div>
+      </div>
+    </div>
+
+    <!-- Conteudo principal -->
+    <div class="dashboard-main">
+
+      <!-- Coluna esquerda -->
+      <div class="dashboard-left">
+
+        <!-- Formulario -->
+        <div class="card" id="lancamentos" aria-label="Formulario de lancamento">
+          <div class="card-header">
+            <h3>&#128221; Novo Lan&#231;amento</h3>
+            <span class="card-badge verde" id="formTipoBadge">Receita</span>
+          </div>
+          <form id="formLancamento" novalidate aria-label="Cadastrar lancamento">
+            <div class="form-group">
+              <label>Tipo de lan&#231;amento</label>
+              <div class="tipo-toggle" role="group" aria-label="Selecionar tipo">
+                <button type="button" id="btnReceita" class="tipo-btn active-receita" aria-pressed="true">&#128154; Receita</button>
+                <button type="button" id="btnDespesa" class="tipo-btn" aria-pressed="false">&#128308; Despesa</button>
+              </div>
+              <input type="hidden" id="tipoLancamento" value="receita" />
+            </div>
+            <div class="form-group">
+              <label for="descricao">Descri&#231;&#227;o</label>
+              <input type="text" id="descricao" class="form-control" placeholder="Ex: Sal&#225;rio, Aluguel..." maxlength="80" required />
+            </div>
+            <div class="form-row">
+              <div class="form-group" style="margin-bottom:0">
+                <label for="categoria">Categoria</label>
+                <select id="categoria" class="form-control" required>
+                  <option value="">Selecione...</option>
+                  <optgroup label="Receitas">
+                    <option value="Sal&#225;rio">&#128188; Sal&#225;rio</option>
+                    <option value="Freelance">&#128187; Freelance</option>
+                    <option value="Investimentos">&#128200; Investimentos</option>
+                    <option value="Outros (receita)">&#10024; Outros</option>
+                  </optgroup>
+                  <optgroup label="Despesas">
+                    <option value="Moradia">&#127968; Moradia</option>
+                    <option value="Alimenta&#231;&#227;o">&#127829; Alimenta&#231;&#227;o</option>
+                    <option value="Transporte">&#128663; Transporte</option>
+                    <option value="Sa&#250;de">&#128138; Sa&#250;de</option>
+                    <option value="Educa&#231;&#227;o">&#128218; Educa&#231;&#227;o</option>
+                    <option value="Lazer">&#127918; Lazer</option>
+                    <option value="Vestu&#225;rio">&#128085; Vestu&#225;rio</option>
+                    <option value="Mercado">&#128722; Mercado</option>
+                    <option value="Outros (despesa)">&#128204; Outros</option>
+                  </optgroup>
+                </select>
+              </div>
+              <div class="form-group" style="margin-bottom:0">
+                <label for="valor">Valor (R$)</label>
+                <input type="number" id="valor" class="form-control" placeholder="0,00" min="0.01" step="0.01" required />
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:16px">
+              <label for="dataLancamento">Data</label>
+              <input type="date" id="dataLancamento" class="form-control" required />
+            </div>
+            <div class="form-group">
+              <label class="check-label" for="lancamentoRecorrente">
+                <input type="checkbox" id="lancamentoRecorrente" class="check-input" />
+                <span class="check-custom" aria-hidden="true"></span>
+                Lan&#231;amento recorrente (mensalmente)
+              </label>
+            </div>
+            <input type="hidden" id="editId" value="" />
+            <button type="submit" class="btn-submit" id="btnSubmit">&#9989; Cadastrar lan&#231;amento</button>
+          </form>
+        </div>
+
+        <!-- Lista -->
+        <div class="card" style="margin-top:20px" aria-label="Lista de lancamentos">
+          <div class="card-header">
+            <h3>&#128203; &#218;ltimos Lan&#231;amentos</h3>
+            <span class="card-badge verde" id="totalLancamentosBadge">0</span>
+          </div>
+          <div class="controles-lista" role="search">
+            <input type="search" id="buscaTexto" class="form-control busca-input" placeholder="&#128269; Buscar descri&#231;&#227;o..." aria-label="Buscar" />
+            <select id="filtroMes" class="form-control ctrl-select" aria-label="Filtrar por mes">
+              <option value="">&#128197; Todos os meses</option>
+            </select>
+            <select id="ordenacaoLista" class="form-control ctrl-select" aria-label="Ordenar">
+              <option value="data-desc">&#8595; Mais recentes</option>
+              <option value="data-asc">&#8593; Mais antigas</option>
+              <option value="valor-desc">&#128176; Maior valor</option>
+              <option value="valor-asc">&#128176; Menor valor</option>
+              <option value="categoria">&#127991; Categoria A-Z</option>
+            </select>
+          </div>
+          <div class="filtros" role="group" aria-label="Filtrar por tipo">
+            <button class="filtro-btn active" data-filtro="todos">Todos</button>
+            <button class="filtro-btn" data-filtro="receita">Receitas</button>
+            <button class="filtro-btn" data-filtro="despesa">Despesas</button>
+          </div>
+          <div id="listaLancamentos" role="list" aria-live="polite">
+            <div class="empty-state">
+              <div class="es-icon">&#128237;</div>
+              <p>Nenhum lan&#231;amento ainda.<br>Cadastre seu primeiro acima!</p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Sidebar -->
+      <div class="dashboard-sidebar">
+
+        <!-- Grafico de pizza -->
+        <div class="card" aria-label="Grafico por categoria">
+          <div class="card-header"><h3>&#129361; Por Categoria</h3></div>
+          <div class="chart-pizza-wrap">
+            <canvas id="canvasGraficoPizza" aria-label="Grafico de rosca" role="img"></canvas>
+          </div>
+          <div class="chart-wrap" id="grafico" style="display:none">
+            <div class="empty-state" style="padding:24px 0">
+              <div class="es-icon">&#128209;</div><p>Sem despesas para exibir.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Grafico de linha -->
+        <div class="card" aria-label="Evolucao do saldo">
+          <div class="card-header"><h3>&#128200; Evolu&#231;&#227;o do Saldo</h3></div>
+          <div class="chart-linha-wrap">
+            <canvas id="canvasGraficoLinha" aria-label="Grafico de linha" role="img"></canvas>
+          </div>
+        </div>
+
+        <!-- Resumo mensal -->
+        <div class="card" aria-label="Resumo do mes">
+          <div class="card-header">
+            <h3>&#128197; Este M&#234;s</h3>
+            <span class="card-badge" id="tendenciaBadge">&#8212;</span>
+          </div>
+          <div class="resumo-mensal">
+            <div class="resumo-item">
+              <span>Receitas</span>
+              <strong class="txt-verde" id="resumoReceitasMes">R$ 0,00</strong>
+            </div>
+            <div class="resumo-item">
+              <span>Despesas</span>
+              <strong class="txt-vermelho" id="resumoDespesasMes">R$ 0,00</strong>
+            </div>
+            <div class="resumo-separador"></div>
+            <div class="resumo-item">
+              <span>vs. m&#234;s anterior</span>
+              <strong id="resumoVariacao">&#8212;</strong>
+            </div>
+          </div>
+          <p class="tendencia-info" id="tendenciaInfo"></p>
+        </div>
+
+        <!-- Meta financeira -->
+        <div class="card" aria-label="Meta financeira">
+          <div class="card-header">
+            <h3>&#127919; Meta Financeira</h3>
+            <span class="card-badge dourado" id="metaBadge">0%</span>
+          </div>
+          <div class="meta-info">
+            <span>Economizado</span>
+            <strong id="metaEconomizado">R$ 0,00</strong>
+          </div>
+          <div class="meta-bar-track" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+            <div class="meta-bar-fill" id="metaBarFill" style="width:0%"></div>
+          </div>
+          <div class="meta-pct" id="metaPct">0% da meta atingida</div>
+          <div style="font-size:.8rem;color:var(--text-muted);margin-bottom:14px;text-align:right">
+            Meta: <strong id="metaValorDisplay">R$ 1.000,00</strong>
+          </div>
+          <form class="meta-form" id="formMeta" aria-label="Atualizar meta">
+            <input type="number" id="inputMeta" class="form-control" placeholder="Nova meta (R$)" min="1" step="0.01" />
+            <button type="submit">Salvar</button>
+            <button type="button" id="btnResetarMeta" class="btn-resetar-meta" title="Resetar meta" aria-label="Resetar meta">&#8634;</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="onda-transicao" aria-hidden="true"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <a href="#hero" class="nav-logo" style="margin-bottom:0">
+        <div class="logo-icon">&#128176;</div>
+        <span class="logo-text">Finan&#231;as <span>F&#225;cil</span></span>
+      </a>
+      <p>Sistema de gest&#227;o financeira pessoal. Simples, gratuito e privado.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navega&#231;&#227;o</h4>
+      <ul>
+        <li><a href="#hero">In&#237;cio</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#lancamentos">Lan&#231;amentos</a></li>
+        <li><a href="#recursos">Recursos</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Sobre o Projeto</h4>
+      <ul>
+        <li><a href="#sobre">Trabalho Acad&#234;mico</a></li>
+        <li><a href="#sobre">Metodologia &#193;gil</a></li>
+        <li><a href="#sobre">Tecnologias</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>&#169; 2026 Finan&#231;as F&#225;cil &#8212; Projeto Acad&#234;mico.</span>
+    <span>Desenvolvido com &#128154; em HTML, CSS e JavaScript.</span>
+  </div>
+</footer>
+
+<!-- MODAL DE LOGIN -->
+<div class="modal-overlay" id="modalAuth" role="dialog" aria-modal="true" aria-labelledby="modalAuthTitle">
+  <div class="modal">
+    <div class="modal-top">
+      <h2 id="modalAuthTitle">Acesse sua conta</h2>
+      <button class="modal-close" id="modalClose" aria-label="Fechar">&#10005;</button>
+    </div>
+    <div class="modal-tabs" role="tablist">
+      <button class="modal-tab active" id="tabLogin"   role="tab" aria-selected="true">Entrar</button>
+      <button class="modal-tab"         id="tabCadastro" role="tab" aria-selected="false">Cadastrar</button>
+    </div>
+    <div class="modal-form active" id="formLogin" role="tabpanel">
+      <div class="form-group"><label for="loginEmail">E-mail</label><input type="email" id="loginEmail" class="form-control" placeholder="seu@email.com" /></div>
+      <div class="form-group"><label for="loginSenha">Senha</label><input type="password" id="loginSenha" class="form-control" placeholder="&#183;&#183;&#183;&#183;&#183;&#183;&#183;&#183;" /></div>
+      <button class="btn-submit" id="btnLogin" type="button">Entrar na conta</button>
+      <p class="modal-footer-txt">N&#227;o tem conta? <a href="#" onclick="document.getElementById('tabCadastro').click();return false;" style="color:var(--verde-primario);font-weight:600">Cadastre-se gr&#225;tis</a></p>
+    </div>
+    <div class="modal-form" id="formCadastro" role="tabpanel">
+      <div class="form-group"><label for="cadNome">Nome completo</label><input type="text" id="cadNome" class="form-control" placeholder="Seu nome" /></div>
+      <div class="form-group"><label for="cadEmail">E-mail</label><input type="email" id="cadEmail" class="form-control" placeholder="seu@email.com" /></div>
+      <div class="form-group"><label for="cadSenha">Senha</label><input type="password" id="cadSenha" class="form-control" placeholder="M&#237;nimo 6 caracteres" /></div>
+      <button class="btn-submit" id="btnCadastrar" type="button">Criar conta gr&#225;tis</button>
+      <p class="modal-footer-txt">J&#225; tem conta? <a href="#" onclick="document.getElementById('tabLogin').click();return false;" style="color:var(--verde-primario);font-weight:600">Entrar</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DE CONFIRMACAO DE EXCLUSAO -->
+<div class="modal-overlay" id="modalConfirmarExclusao" role="dialog" aria-modal="true" aria-labelledby="titConfExclusao">
+  <div class="modal modal-confirm">
+    <div class="modal-top" style="flex-direction:column;align-items:center;gap:8px;text-align:center">
+      <div style="font-size:2.5rem">&#128465;</div>
+      <h2 id="titConfExclusao">Confirmar exclus&#227;o</h2>
+    </div>
+    <p class="confirm-msg">
+      Tem certeza que deseja remover <strong id="confirmExcluirNome"></strong>?<br>
+      <small style="color:var(--text-muted)">Esta a&#231;&#227;o n&#227;o pode ser desfeita.</small>
+    </p>
+    <div class="confirm-acoes">
+      <button class="btn-outline" id="btnCancelarExclusao">Cancelar</button>
+      <button class="btn-danger"  id="btnConfirmarExclusao">&#128465; Excluir</button>
+    </div>
+  </div>
+</div>
+
+<!-- TUTORIAL DE BOAS-VINDAS -->
+<div class="tutorial-overlay" id="tutorialOverlay" role="dialog" aria-modal="true" aria-labelledby="tutorialTitulo">
+  <div class="tutorial-box">
+    <div class="tutorial-step" id="tutStep1">
+      <div class="tutorial-emoji">&#128075;</div>
+      <h2 id="tutorialTitulo">Bem-vindo ao Finan&#231;as F&#225;cil!</h2>
+      <p>Seu sistema de gest&#227;o financeira pessoal. Vamos fazer um tour r&#225;pido?</p>
+      <div class="tutorial-nav">
+        <button class="btn-outline" id="btnPularTutorial">Pular tour</button>
+        <button class="btn-primary" onclick="irParaPassoTutorial(2)">Pr&#243;ximo &#8594;</button>
+      </div>
+    </div>
+    <div class="tutorial-step tut-hidden" id="tutStep2">
+      <div class="tutorial-emoji">&#128176;</div>
+      <h2>Cadastre seus lan&#231;amentos</h2>
+      <p>Registre receitas e despesas com categorias. Os dados ficam <strong>no seu dispositivo</strong>.</p>
+      <div class="tutorial-nav">
+        <button class="btn-outline" onclick="irParaPassoTutorial(1)">&#8592; Voltar</button>
+        <button class="btn-primary" onclick="irParaPassoTutorial(3)">Pr&#243;ximo &#8594;</button>
+      </div>
+    </div>
+    <div class="tutorial-step tut-hidden" id="tutStep3">
+      <div class="tutorial-emoji">&#128202;</div>
+      <h2>Acompanhe seus gr&#225;ficos</h2>
+      <p>Veja gastos por categoria, saldo ao longo dos meses e defina metas financeiras!</p>
+      <div class="tutorial-nav">
+        <button class="btn-outline" onclick="irParaPassoTutorial(2)">&#8592; Voltar</button>
+        <button class="btn-primary" id="btnFinalizarTutorial">Come&#231;ar agora &#128640;</button>
+      </div>
+    </div>
+    <div class="tutorial-progress" aria-hidden="true">
+      <span class="tut-dot tut-ativo" data-step="1"></span>
+      <span class="tut-dot" data-step="2"></span>
+      <span class="tut-dot" data-step="3"></span>
+    </div>
+  </div>
+</div>
+
+<div class="toast-container" id="toastContainer" aria-live="polite" role="status"></div>
+<script src="animacoes.js"></script>
+<script src="script.js"></script>
+<script src="particulas.js"></script>
+</body>
+</html>

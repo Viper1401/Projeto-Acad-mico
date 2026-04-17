@@ -1,0 +1,29 @@
+{
+  "name": "Finanças Fácil",
+  "short_name": "FinFácil",
+  "description": "Sistema de gestão financeira pessoal — Projeto Acadêmico",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0a0f1a",
+  "theme_color": "#16a34a",
+  "orientation": "portrait-primary",
+  "lang": "pt-BR",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%2316a34a'/%3E%3Ctext y='75' x='50' text-anchor='middle' font-size='65'%3E%F0%9F%92%B0%3C/text%3E%3C/svg%3E",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "categories": ["finance", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Novo Lançamento",
+      "short_name": "Novo",
+      "url": "./index.html#lancamentos",
+      "description": "Cadastrar novo lançamento financeiro"
+    }
+  ]
+}
