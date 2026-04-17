@@ -1,6 +1,6 @@
 # 💰 Finanças Fácil
 
-> Sistema de gestão financeira pessoal — Projeto Acadêmico de Gestão Ágil de Projetos
+> Sistema de gestão financeira pessoal — Projeto Acadêmico 
 
 ---
 
