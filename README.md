@@ -6,7 +6,7 @@
 
 ## 📌 Sobre o Projeto
 
-**Finanças Fácil** é um sistema web de gestão financeira pessoal desenvolvido como projeto prático da disciplina de **Gestão Ágil de Projetos**, aplicando a metodologia **Scrum** com 4 sprints incrementais.
+**Finanças Fácil** é um sistema web de gestão financeira pessoal desenvolvido como projeto prático, aplicando a metodologia **Scrum** com 4 sprints incrementais.
 
 O sistema permite controlar receitas, despesas, metas financeiras e visualizar dados em gráficos interativos — tudo de forma **gratuita, local e sem necessidade de cadastro**.
 
